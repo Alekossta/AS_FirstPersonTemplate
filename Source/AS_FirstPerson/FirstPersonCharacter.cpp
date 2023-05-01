@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AFirstPersonCharacter::AFirstPersonCharacter()
@@ -12,9 +13,20 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
-	Camera->SetupAttachment(RootComponent);
-	Camera->SetRelativeLocation(FVector(-10.f, 0.f, 60.f));
-	Camera->bUsePawnControlRotation = true;
+	if (Camera)
+	{
+		Camera->SetupAttachment(RootComponent);
+		Camera->SetRelativeLocation(FVector(-10.f, 0.f, 60.f));
+		Camera->bUsePawnControlRotation = true;
+	}
+
+	UCharacterMovementComponent* MovementComponent = GetCharacterMovement();
+	if (MovementComponent)
+	{
+		MovementComponent->AirControl = 1.f;
+		MovementComponent->GravityScale = 1.8f;
+		MovementComponent->JumpZVelocity = 800.f;
+	}
 }
 
 // Called when the game starts or when spawned
